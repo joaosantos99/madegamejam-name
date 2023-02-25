@@ -63,6 +63,12 @@ public class PlayerMovement : MonoBehaviour
         {
             currentFuel += 1;
         }
+
+        //RestartGame
+        if (Input.GetKeyDown(KeyCode.Space) && endGame)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -77,11 +83,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             endGame = true;
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
         }
     }
 
