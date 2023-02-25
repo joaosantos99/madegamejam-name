@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     //Fuel Props
     public float maxFuel = 100;
     public float currentFuel = 100;
-    private float lossFuel = 10;
+    private float lossFuel = 5;
 
     void Update()
     {
