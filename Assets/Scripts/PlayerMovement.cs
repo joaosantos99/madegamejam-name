@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -21,14 +22,13 @@ public class PlayerMovement : MonoBehaviour
         //StraightJump
         if (Input.GetKeyDown(KeyCode.W) && currentFuel > 0)
         {
-            rb.velocity = new Vector2(rb.velocity.x, straightJumpingPower);
+            rb.velocity = new Vector2(rb.velocity.x * 0.5f, straightJumpingPower);
             currentFuel -= lossFuel;
-            Debug.Log(currentFuel);
         }
 
         if (Input.GetKeyUp(KeyCode.W) && rb.velocity.y > 0f)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            rb.velocity = new Vector2(rb.velocity.x * 0.5f, rb.velocity.y * 0.5f);
         }
 
         // LeftJump
@@ -36,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(-sidePower, sideJumpPower);
             currentFuel -= lossFuel;
-            Debug.Log(currentFuel);
         }
 
         if (Input.GetKeyUp(KeyCode.A) && rb.velocity.x > 0f)
@@ -49,7 +48,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.velocity = new Vector2(sidePower, sideJumpPower);
             currentFuel -= lossFuel;
-            Debug.Log(currentFuel);
         }
 
         if (Input.GetKeyUp(KeyCode.D) && rb.velocity.x < 0f)
@@ -61,7 +59,20 @@ public class PlayerMovement : MonoBehaviour
         if(IsGrounded() && currentFuel != maxFuel)
         {
             currentFuel += 1;
-            Debug.Log(currentFuel);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.CompareTag("JerryCan"))
+        {
+            Destroy(other.gameObject);
+            currentFuel = maxFuel;
+        }
+
+        if(other.gameObject.CompareTag("Meteor"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 

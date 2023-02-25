@@ -10,7 +10,6 @@ public class CameraMovement : MonoBehaviour
     {
         if (player.transform.position.y > 5.15)
         {
-            Debug.Log(transform.position.y);
             transform.position = new Vector3(0, player.transform.position.y, -5);
         }
     }
