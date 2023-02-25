@@ -183,7 +183,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 425810280}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.85, y: -0.16, z: 0}
+  m_LocalPosition: {x: 5.5, y: -2.37, z: 0}
   m_LocalScale: {x: 0.589, y: 0.589, z: 0.589}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -469,9 +469,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 1159047302}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 256
+  straightJumpingPower: 10
+  sideJumpPower: 7.5
+  sidePower: 5
 --- !u!61 &1159047301
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -612,8 +612,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1266330195}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.38, y: -0.83, z: 0}
-  m_LocalScale: {x: 0.589, y: 0.589, z: 0.589}
+  m_LocalPosition: {x: 0.28, y: -4.47, z: 0}
+  m_LocalScale: {x: 4.5618715, y: 0.589, z: 0.589}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 75354227}
@@ -723,7 +723,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1466676444}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.22, y: 0, z: 0}
+  m_LocalPosition: {x: -4.71, y: -0.82, z: 0}
   m_LocalScale: {x: 0.589, y: 0.589, z: 0.589}
   m_ConstrainProportionsScale: 0
   m_Children: []
