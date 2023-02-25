@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float sideJumpPower;
     [SerializeField] private float sidePower;
 
+    private bool endGame = false;
+
     //Fuel Props
     public float maxFuel = 100;
     public float currentFuel = 100;
@@ -19,49 +23,65 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         //StraightJump
-        if (Input.GetKeyDown(KeyCode.W) && currentFuel > 0)
+        if (Input.GetKeyDown(KeyCode.W) && currentFuel > 0 && !endGame)
         {
-            rb.velocity = new Vector2(rb.velocity.x, straightJumpingPower);
+            rb.velocity = new Vector2(rb.velocity.x * 0.5f, straightJumpingPower);
             currentFuel -= lossFuel;
-            Debug.Log(currentFuel);
         }
 
-        if (Input.GetKeyUp(KeyCode.W) && rb.velocity.y > 0f)
+        if (Input.GetKeyUp(KeyCode.W) && rb.velocity.y > 0f && !endGame)
         {
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
+            rb.velocity = new Vector2(rb.velocity.x * 0.5f, rb.velocity.y * 0.5f);
         }
 
         // LeftJump
-        if (Input.GetKeyDown(KeyCode.A) && currentFuel > 0)
+        if (Input.GetKeyDown(KeyCode.A) && currentFuel > 0 && !endGame)
         {
             rb.velocity = new Vector2(-sidePower, sideJumpPower);
             currentFuel -= lossFuel;
-            Debug.Log(currentFuel);
         }
 
-        if (Input.GetKeyUp(KeyCode.A) && rb.velocity.x > 0f)
+        if (Input.GetKeyUp(KeyCode.A) && rb.velocity.x > 0f && !endGame)
         {
             rb.velocity = new Vector2(rb.velocity.x * -0.9f, rb.velocity.y * 0.5f);
         }
 
         //RightJump
-        if (Input.GetKeyDown(KeyCode.D) && currentFuel > 0)
+        if (Input.GetKeyDown(KeyCode.D) && currentFuel > 0 && !endGame)
         {
             rb.velocity = new Vector2(sidePower, sideJumpPower);
             currentFuel -= lossFuel;
-            Debug.Log(currentFuel);
         }
 
-        if (Input.GetKeyUp(KeyCode.D) && rb.velocity.x < 0f)
+        if (Input.GetKeyUp(KeyCode.D) && rb.velocity.x < 0f && !endGame)
         {
             rb.velocity = new Vector2(rb.velocity.x * 0.9f, rb.velocity.y * 0.5f);
         }
 
         //FuelRecovery
-        if(IsGrounded() && currentFuel != maxFuel)
+        if(IsGrounded() && currentFuel != maxFuel && !endGame)
         {
             currentFuel += 1;
-            Debug.Log(currentFuel);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.gameObject.CompareTag("JerryCan"))
+        {
+            Destroy(other.gameObject);
+            currentFuel = maxFuel;
+        }
+
+        if(other.gameObject.CompareTag("Meteor"))
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            endGame = true;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
         }
     }
 
