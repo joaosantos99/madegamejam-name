@@ -96,6 +96,13 @@ public class PlayerMovement : MonoBehaviour
             currentFuel += 1;
         }
 
+        //Magic Fuel Input
+        if (Input.GetKeyDown(KeyCode.Alpha2) && currentFuel != maxFuel && !endGame)
+        {
+            currentFuel = 100;
+        }
+
+
         //LeaderBoard
         /*if (Input.GetKeyDown(KeyCode.Return) && endGame && !restartGame)
         {
@@ -126,6 +133,7 @@ public class PlayerMovement : MonoBehaviour
             leaderboardObject.GetComponent<CanvasGroup>().alpha = 0f;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }*/
+
 
     }
 
