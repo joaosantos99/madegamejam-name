@@ -9,16 +9,28 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private TMP_InputField inputName;
+    [SerializeField] private TextMeshProUGUI leaderboardObject;
     [SerializeField] private float straightJumpingPower;
     [SerializeField] private float sideJumpPower;
     [SerializeField] private float sidePower;
 
-    private bool endGame = false;
+    public static bool endGame = false;
+    public static bool restartGame = false;
+    private Vector2 originalPos;
+    private Leaderboard leaderboard;
 
     //Fuel Props
     public float maxFuel = 100;
     public float currentFuel = 100;
     private float lossFuel = 5;
+
+    void Start()
+    {
+        leaderboard = new Leaderboard();
+        inputName.enabled = false;
+        originalPos = new Vector2(rb.position.x, rb.position.y);
+    }
 
     void Update()
     {
@@ -64,11 +76,37 @@ public class PlayerMovement : MonoBehaviour
             currentFuel += 1;
         }
 
-        //RestartGame
-        if (Input.GetKeyDown(KeyCode.Space) && endGame)
+        //LeaderBoard
+        if (Input.GetKeyDown(KeyCode.Return) && endGame && !restartGame)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            leaderboard.addScore(inputName.text, Score.heightsScore);
+
+            inputName.GetComponent<CanvasGroup>().alpha = 0f;
+            leaderboardObject.GetComponent<CanvasGroup>().alpha = 1f;
+            leaderboardObject.text = "LeaderBoard: \n";
+            for(int i = 0; i < leaderboard.scoresList.Count; i++)
+            {
+                leaderboardObject.text += $"{leaderboard.scoresList[i].name} - {leaderboard.scoresList[i].score}\n";
+            }
         }
+
+        if (Input.GetKeyUp(KeyCode.Return) && endGame && !restartGame)
+        {
+            restartGame = true;
+        }
+
+        //RestartGame
+        if (Input.GetKeyDown(KeyCode.Return) && restartGame)
+        {
+            restartGame = false;
+            inputName.enabled = false;
+            rb.position = originalPos;
+            currentFuel = maxFuel;
+            endGame = false;
+            leaderboardObject.GetComponent<CanvasGroup>().alpha = 0f;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -83,6 +121,8 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             endGame = true;
+            inputName.enabled = true;
+            inputName.GetComponent<CanvasGroup>().alpha = 1f;
         }
     }
 
