@@ -6,6 +6,7 @@ using TMPro;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private GameObject player;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
@@ -14,6 +15,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float straightJumpingPower;
     [SerializeField] private float sideJumpPower;
     [SerializeField] private float sidePower;
+
+    //Animations
+    private Animator anim;
+
+    //SoundEffects
+    private AudioSource audioData;
 
     public static bool endGame = false;
     public static bool restartGame = false;
@@ -27,9 +34,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        anim = player.GetComponent<Animator>();
+        audioData = GetComponent<AudioSource>();
         leaderboard = new Leaderboard();
         inputName.enabled = false;
         originalPos = new Vector2(rb.position.x, rb.position.y);
+        anim.Play("idle");
     }
 
     void Update()
@@ -38,46 +48,56 @@ public class PlayerMovement : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W) && currentFuel > 0 && !endGame)
         {
             rb.velocity = new Vector2(rb.velocity.x * 0.5f, straightJumpingPower);
+            anim.Play("Middle_Animation");
+            audioData.Play(0);
             currentFuel -= lossFuel;
         }
 
         if (Input.GetKeyUp(KeyCode.W) && rb.velocity.y > 0f && !endGame)
         {
             rb.velocity = new Vector2(rb.velocity.x * 0.5f, rb.velocity.y * 0.5f);
+            anim.Play("idle");
         }
 
         // LeftJump
         if (Input.GetKeyDown(KeyCode.A) && currentFuel > 0 && !endGame)
         {
             rb.velocity = new Vector2(-sidePower, sideJumpPower);
+            anim.Play("Right_Animation");
+            audioData.Play(0);
+
             currentFuel -= lossFuel;
         }
 
         if (Input.GetKeyUp(KeyCode.A) && rb.velocity.x > 0f && !endGame)
         {
             rb.velocity = new Vector2(rb.velocity.x * -0.9f, rb.velocity.y * 0.5f);
+            anim.Play("idle");
         }
 
         //RightJump
         if (Input.GetKeyDown(KeyCode.D) && currentFuel > 0 && !endGame)
         {
             rb.velocity = new Vector2(sidePower, sideJumpPower);
+            anim.Play("Left_Animation");
+            audioData.Play(0);
             currentFuel -= lossFuel;
         }
 
         if (Input.GetKeyUp(KeyCode.D) && rb.velocity.x < 0f && !endGame)
         {
             rb.velocity = new Vector2(rb.velocity.x * 0.9f, rb.velocity.y * 0.5f);
+            anim.Play("idle");
         }
 
         //FuelRecovery
-        if(IsGrounded() && currentFuel != maxFuel && !endGame)
+        if (IsGrounded() && currentFuel != maxFuel && !endGame)
         {
             currentFuel += 1;
         }
 
         //LeaderBoard
-        if (Input.GetKeyDown(KeyCode.Return) && endGame && !restartGame)
+        /*if (Input.GetKeyDown(KeyCode.Return) && endGame && !restartGame)
         {
             leaderboard.addScore(inputName.text, Score.heightsScore);
 
@@ -105,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
             endGame = false;
             leaderboardObject.GetComponent<CanvasGroup>().alpha = 0f;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        }
+        }*/
 
     }
 
@@ -119,10 +139,11 @@ public class PlayerMovement : MonoBehaviour
 
         if(other.gameObject.CompareTag("Meteor"))
         {
-            rb.constraints = RigidbodyConstraints2D.FreezeAll;
-            endGame = true;
-            inputName.enabled = true;
-            inputName.GetComponent<CanvasGroup>().alpha = 1f;
+            //rb.constraints = RigidbodyConstraints2D.FreezeAll;
+            //endGame = true;
+            //inputName.enabled = true;
+            //inputName.GetComponent<CanvasGroup>().alpha = 1f;
+            SceneManager.LoadScene("Star Menu");
         }
     }
 
