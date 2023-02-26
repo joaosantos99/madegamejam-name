@@ -143,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
             //endGame = true;
             //inputName.enabled = true;
             //inputName.GetComponent<CanvasGroup>().alpha = 1f;
-            SceneManager.LoadScene("Star Menu");
+            SceneManager.LoadScene("Scoreboard");
         }
     }
 

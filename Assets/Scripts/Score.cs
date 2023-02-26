@@ -8,7 +8,13 @@ public class Score : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] TextMeshProUGUI scoreObject;
     public static int heightsScore = 0;
-    private int currentScore = 0;
+    public static int currentScore = 0;
+
+    void Start()
+    {
+        heightsScore = 0;
+        currentScore = 0;
+    }
 
     void Update()
     {
